@@ -51,7 +51,7 @@ def main(argv):
       "board_uses_vendorimage") == "true"
 
   if board_uses_vendorimage:
-    target_files_dir = "SYSTEM/vendor"
+    target_files_dir = "VENDOR"
   else:
     target_files_dir = "SYSTEM/vendor"
 
