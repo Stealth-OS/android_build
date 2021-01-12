@@ -2,7 +2,6 @@
 
 """
 Check boot jars.
-
 Usage: check_boot_jars.py <package_allow_list_file> <jar1> <jar2> ...
 """
 import logging
@@ -49,35 +48,6 @@ def CheckJar(allow_list_path, jar):
   if p.returncode != 0:
     return False
   items = stdout.split()
-  classes = 0
-  for f in items:
-    if f.endswith('.class'):
-      classes += 1
-      package_name = os.path.dirname(f)
-      package_name = package_name.replace('/', '.')
-      if not package_name or not allow_list_re.match(package_name):
-        print >> sys.stderr, ('Error: %s contains class file %s, whose package name %s is empty or'
-                              ' not in the allow list %s of packages allowed on the bootclasspath.'
-                              % (jar, f, package_name, allow_list_path))
-        return False
-  if classes == 0:
-    print >> sys.stderr, ('Error: %s does not contain any class files.' % jar)
-    return False
-  return True
-
-
-def CheckJar(dexdump_path, allow_list_path, jar):
-  """Check a jar file.
-  """
-  # Get the list of files inside the jar file.
-  p = subprocess.Popen(args='jar tf %s' % jar,
-      stdout=subprocess.PIPE, shell=True)
-  stdout, _ = p.communicate()
-  if p.returncode != 0:
-    return False
-  items = stdout.split()
-  if 'classes.dex' in items:
-    return CheckDexJar(dexdump_path, allow_list_path, jar)
   classes = 0
   for f in items:
     if f.endswith('.class'):
